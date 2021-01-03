@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"paeunt.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="本文记录了一些在Arch Linux环境下的安装、配置和使用方法，以备不时查阅。文中的常用工具仅对个人而言，请读者酌情使用。 系统的基本安装系统安装的教程可以考虑阅读**官方文档**，这里仅做简述。 系统安装包括硬盘分区，基本的软件系统安装和配置，bootloader和网络工具的安装。 分区时候应注意是否是双系统，如果都是EFI启动的话，注意不要设置独立的EFI分区，而是应该将Windows的EF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="定制自由的生产力工具 —— Arch Linux">
+<meta property="og:url" content="http://paeunt.github.io/2021/01/03/modified_archlinux/index.html">
+<meta property="og:site_name" content="Carboniferous">
+<meta property="og:description" content="本文记录了一些在Arch Linux环境下的安装、配置和使用方法，以备不时查阅。文中的常用工具仅对个人而言，请读者酌情使用。 系统的基本安装系统安装的教程可以考虑阅读**官方文档**，这里仅做简述。 系统安装包括硬盘分区，基本的软件系统安装和配置，bootloader和网络工具的安装。 分区时候应注意是否是双系统，如果都是EFI启动的话，注意不要设置独立的EFI分区，而是应该将Windows的EF">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-01-02T17:01:16.212Z">
+<meta property="article:modified_time" content="2021-01-03T04:09:21.739Z">
+<meta property="article:author" content="Homalozoa X">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://paeunt.github.io/2021/01/03/modified_archlinux/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>定制自由的生产力工具 —— Arch Linux | Carboniferous</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">Carboniferous</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://paeunt.github.io/2021/01/03/modified_archlinux/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Homalozoa X">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Carboniferous">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          定制自由的生产力工具 —— Arch Linux
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2021-01-03 01:01:16 / Modified: 12:09:21" itemprop="dateCreated datePublished" datetime="2021-01-03T01:01:16+08:00">2021-01-03</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本文记录了一些在Arch Linux环境下的安装、配置和使用方法，以备不时查阅。文中的常用工具仅对个人而言，请读者酌情使用。</p>
+<h4 id="系统的基本安装"><a href="#系统的基本安装" class="headerlink" title="系统的基本安装"></a>系统的基本安装</h4><p>系统安装的教程可以考虑阅读**<a target="_blank" rel="noopener" href="https://wiki.archlinux.org/index.php/Installation_guide">官方文档</a>**，这里仅做简述。</p>
+<p>系统安装包括硬盘分区，基本的软件系统安装和配置，<code>bootloader</code>和<em>网络工具</em>的安装。</p>
+<p>分区时候应注意是否是双系统，如果都是EFI启动的话，注意不要设置独立的EFI分区，而是应该将Windows的EFI分区嵌入Linux的<code>/boot</code>分区下。如我的分区情况如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT</span><br><span class="line">nvme1n1     259:0    0 953.9G  0 disk </span><br><span class="line">├─nvme1n1p1 259:2    0  14.9G  0 part [SWAP]</span><br><span class="line">├─nvme1n1p2 259:3    0   513M  0 part /boot</span><br><span class="line">└─nvme1n1p3 259:4    0 938.5G  0 part /</span><br><span class="line">nvme0n1     259:1    0   477G  0 disk </span><br><span class="line">├─nvme0n1p1 259:5    0   499M  0 part </span><br><span class="line">├─nvme0n1p2 259:6    0   100M  0 part /boot/EFI</span><br><span class="line">├─nvme0n1p3 259:7    0    16M  0 part </span><br><span class="line">├─nvme0n1p4 259:8    0 241.4G  0 part </span><br><span class="line">├─nvme0n1p5 259:9    0   590M  0 part </span><br><span class="line">└─nvme0n1p6 259:10   0 234.4G  0 part</span><br></pre></td></tr></table></figure>
+
+<p><strong>当然，需要安装的<code>os-prober</code>应在重启后进入硬盘系统后再操作，才能正确识别Windows 10。</strong></p>
+<p>要安装的基本软件系统包括<code>base</code>、<code>base-devel</code>、<code>linux</code>和<code>linux-firmware</code>等。一般在使用<code>pacstrap</code>时，可以顺手讲<code>vim</code>或<code>emacs</code>安装上，以替代不好用的<code>nano</code>。然后通过</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> genfstab -U /mnt &gt;&gt; /mnt/etc/fstab</span></span><br></pre></td></tr></table></figure>
+
+<p>生成系统启动时需要挂载的硬盘表。然后通过</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> arch-chroot /mnt</span></span><br></pre></td></tr></table></figure>
+
+<p>进入硬盘系统，并进行时区、语言、用户和网络等配置。最后一步是安装引导器，即<code>bootloader</code>，一般在PC桌面环境我选择<code>grub</code>。经过简单配置后关机，拔掉U盘并进入硬盘系统。</p>
+<p>重启后，可以先连接网络，并安装图形界面，常见的有KDE、GNOME、XFCE和LXDE等。具体配置视个人情况而定，我的常用桌面环境是基于GNOME的，并使用<code>networkmanager</code>管理网络。</p>
+<h4 id="GNOME的常用插件"><a href="#GNOME的常用插件" class="headerlink" title="GNOME的常用插件"></a>GNOME的常用插件</h4><p>通过Tweaks可以极大程度上地定制自己喜欢的GNOME界面并添加提高生产力的插件。</p>
+<ul>
+<li><code>gnome-shell-extension-gsconnect</code> 局域网内连接Android设备的插件，共享消息、文件、文件夹和互控，很便捷，可以多设备间互传，不只局限于两设备。</li>
+<li><code>gnome-shell-extension-topicons-plus-git</code> 顶栏显示图标的插件。</li>
+<li><code>gnome-shell-extension-appindicator-git</code> 收集各种常驻程序在顶栏，和上一条相似。</li>
+<li><code>kimpanel 给fcitx5暂时接锅的插件，因为fcitx5在基于wayland的软件如Libreoffice上不显示</code>预选栏`，通过这个插件可以缓解。</li>
+<li><code>refresh-wifi</code> 提供在顶栏选择Wi-Fi时的刷新按钮。</li>
+</ul>
+<h4 id="GNOME的主题"><a href="#GNOME的主题" class="headerlink" title="GNOME的主题"></a>GNOME的主题</h4><p>主题这里选择的是<code>Arc-Darker</code>，图标选择的是<code>Numix-Circle</code></p>
+<h4 id="生产力工具"><a href="#生产力工具" class="headerlink" title="生产力工具"></a>生产力工具</h4><ul>
+<li>shell：<code>zsh</code>和<code>ohmyzsh</code>的配置。</li>
+<li>文本编辑：<code>vim</code>和<code>amix/vimrc</code>的配置。</li>
+<li>输入法：<code>fcitx5</code> 新一代的fcitx，丝滑体验。缺陷是一些界面（比如Steam）没有预选框。</li>
+<li>浏览器：<code>chromium</code> 开源的<code>chrome</code>，当然也可以选择使用<code>chrome</code>。</li>
+<li>网盘：<code>rclone</code> 可以挂载各类网盘（包括谷歌网盘和微软OneDrive等），并通过脚本自启动。</li>
+<li>截图：<code>flameshot</code> 非常好用的截图工具，常驻即可。</li>
+<li>写作：<code>typora</code> 写<code>Markdown</code>使用的工具，比如这篇就是用<code>typora</code>写的……</li>
+<li>电子书：<code>calibre</code> 管理电子书的软件，支持很多格式，包括azw3、epub、pdf和txt等，但我只用来转换格式。</li>
+<li>下载软件：<code>uget</code>和<code>deluge</code>，分别支持普通链接下载和种子下载。</li>
+<li>听歌：<code>spotify</code> 好用的全平台听歌软件。</li>
+<li>编码：<code>vscodium</code> 开源版本的<code>vscode</code> ，当然也可以选择使用<code>vscode</code>。</li>
+<li>设计电路板：<code>KiCAD</code> 开源的电路板设计工具，支持三大主流桌面系统。除此之外我还装了<code>eagle</code>，因为我有正版的license。</li>
+<li>P图：<code>gimp</code> 开源的Photoshop替代软件。</li>
+<li>科学计算：<code>octave</code> 开源的MATLAB替代软件。</li>
+<li>功耗控制：<code>slimbookbattery</code> 可以快速改变CPU功耗的软件，提高续航保护电池寿命。</li>
+<li>文档/表格/幻灯片处理：<code>libreoffice</code> 开源的微软Office替代软件，但兼容性并不好，所以我还安装了一个<code>ms-office-online</code>，可以通过在线的方式处理微软的Office文件。</li>
+<li>模型渲染：<code>blender</code> 一个开源的建模和渲染工具。<code>maya</code>Autodesk公司出品的建模和渲染工具，也是因为有正版license。</li>
+<li>文档生产：<code>texlive-most</code>和<code>texstudio</code>，前者是安装<code>LaTeX</code>所有的包，后者是IDE。</li>
+<li>游戏：<code>steam</code> 需要注意的是在运行游戏前配置属性，增加使用独显加速的选项。</li>
+<li>多机协同：由于我使用的是<code>Android</code>设备，故这里使用的多机协同软件是<code>scrpy</code>，可以通过<code>adb tcp</code>模式无线连接设备，并且支持投屏操作，这与只有文本和文件交流的<code>kdeconnect</code>系列形成了互补关系（前文提到的GNOME插件<code>gsconnect</code>是<code>kdeconnect</code>在GNOME环境的变体，属同宗）。</li>
+<li>PDF文件编辑：<code>pdftk</code>有拆页，分页，合并，加密和解密等功能，一两行命令即可完成操作。<code>pdfquirk</code>图像转<code>PDF</code>格式的工具。</li>
+</ul>
+<h4 id="双显卡的支持问题"><a href="#双显卡的支持问题" class="headerlink" title="双显卡的支持问题"></a>双显卡的支持问题</h4><p>由于笔记本的CPU拥有集成显卡，所以图形界面默认使用的<code>Intel</code>集成显卡显示，可以通过安装<code>mesa-demos</code>来获取<code>glxinfo</code>工具，并通过<code>glxinfo | grep “OpenGL vender string&quot;</code>来查看。</p>
+<p>所以当我玩游戏的时候，最好的办法是像Windows那样切换到独显以加速，Linux为我们提供了解决方案，即通过<code>bumblebee</code>。</p>
+<p>首先，需要安装<code>bumblebee</code>和<code>primus</code>，并通过<code>systemctl enable bumblebeed.service</code>设置开启自启服务，然后重启。</p>
+<p>当需要使用独显计算时，通过在程序前添加<code>optirun</code>或<code>primusrun</code>即可。比如通过<code>optirun glxgears -info</code>和<code>glxgears -info</code>可以了解到分别使用了什么设备计算了齿轮图像。在<code>steam</code>中，通过在游戏属性里的<code>SET LAUNCH OPTIONS</code>里添加<code>vblank_mode=0 primusrun %command%</code>便可以使用独显运行游戏。查看是否使用了独显可以通过<code>nvidia-smi</code>了解，不过这是NVIDIA独显的指令，AMD的或者Intel的我就不知道了，也没用过。</p>
+<h4 id="增加emoji的支持"><a href="#增加emoji的支持" class="headerlink" title="增加emoji的支持"></a>增加emoji的支持</h4><p>日常观看网页时经常遇到莫名其妙的方框，后来发现是emoji没有正常显示。emoji的包有很多，这里选择了<code>noto-fonts-emoji</code>。安装了这个包之后，再在<code>/etc/fonts/conf.d/</code>目录下建立<code>99-notosans.conf</code> 并在其中添加下述内容。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">fontconfig</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;fonts.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">fontconfig</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">alias</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">family</span>&gt;</span>sans-serif<span class="tag">&lt;/<span class="name">family</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">prefer</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">family</span>&gt;</span>Noto Sans<span class="tag">&lt;/<span class="name">family</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">family</span>&gt;</span>Noto Color Emoji<span class="tag">&lt;/<span class="name">family</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">family</span>&gt;</span>Noto Emoji<span class="tag">&lt;/<span class="name">family</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">family</span>&gt;</span>DejaVu Sans<span class="tag">&lt;/<span class="name">family</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">prefer</span>&gt;</span> </span><br><span class="line"> <span class="tag">&lt;/<span class="name">alias</span>&gt;</span></span><br><span class="line"></span><br><span class="line"> <span class="tag">&lt;<span class="name">alias</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">family</span>&gt;</span>serif<span class="tag">&lt;/<span class="name">family</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">prefer</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">family</span>&gt;</span>Noto Serif<span class="tag">&lt;/<span class="name">family</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">family</span>&gt;</span>Noto Color Emoji<span class="tag">&lt;/<span class="name">family</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">family</span>&gt;</span>Noto Emoji<span class="tag">&lt;/<span class="name">family</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">family</span>&gt;</span>DejaVu Serif<span class="tag">&lt;/<span class="name">family</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">prefer</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">alias</span>&gt;</span></span><br><span class="line"></span><br><span class="line"> <span class="tag">&lt;<span class="name">alias</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">family</span>&gt;</span>monospace<span class="tag">&lt;/<span class="name">family</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">prefer</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">family</span>&gt;</span>Noto Mono<span class="tag">&lt;/<span class="name">family</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">family</span>&gt;</span>Noto Color Emoji<span class="tag">&lt;/<span class="name">family</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">family</span>&gt;</span>Noto Emoji<span class="tag">&lt;/<span class="name">family</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">family</span>&gt;</span>DejaVu Sans Mono<span class="tag">&lt;/<span class="name">family</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">prefer</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">alias</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">fontconfig</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>再执行刷新字体缓存指令即可。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> fc-cache</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/03/ros2_build_install/" rel="prev" title="ROS 2编译与安装">
+      <i class="fa fa-chevron-left"></i> ROS 2编译与安装
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%AE%89%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">系统的基本安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GNOME%E7%9A%84%E5%B8%B8%E7%94%A8%E6%8F%92%E4%BB%B6"><span class="nav-number">2.</span> <span class="nav-text">GNOME的常用插件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GNOME%E7%9A%84%E4%B8%BB%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">GNOME的主题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%9F%E4%BA%A7%E5%8A%9B%E5%B7%A5%E5%85%B7"><span class="nav-number">4.</span> <span class="nav-text">生产力工具</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%8C%E6%98%BE%E5%8D%A1%E7%9A%84%E6%94%AF%E6%8C%81%E9%97%AE%E9%A2%98"><span class="nav-number">5.</span> <span class="nav-text">双显卡的支持问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A2%9E%E5%8A%A0emoji%E7%9A%84%E6%94%AF%E6%8C%81"><span class="nav-number">6.</span> <span class="nav-text">增加emoji的支持</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Homalozoa X</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">2</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Homalozoa X</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
