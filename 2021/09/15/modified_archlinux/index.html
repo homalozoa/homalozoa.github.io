@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.2.0">
+<meta name="generator" content="Hexo 5.4.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -17,22 +17,22 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"paeunt.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"homalozoa.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="本文记录了一些在Arch Linux环境下的安装、配置和使用方法，以备不时查阅。文中的常用工具仅对个人而言，请读者酌情使用。 系统的基本安装系统安装的教程可以考虑阅读**官方文档**，这里仅做简述。 系统安装包括硬盘分区，基本的软件系统安装和配置，bootloader和网络工具的安装。 分区时候应注意是否是双系统，如果都是EFI启动的话，注意不要设置独立的EFI分区，而是应该将Windows的EF">
 <meta property="og:type" content="article">
 <meta property="og:title" content="定制自由的生产力工具 —— Arch Linux">
-<meta property="og:url" content="http://paeunt.github.io/2021/01/03/modified_archlinux/index.html">
+<meta property="og:url" content="https://homalozoa.github.io/2021/09/15/modified_archlinux/index.html">
 <meta property="og:site_name" content="Carboniferous">
 <meta property="og:description" content="本文记录了一些在Arch Linux环境下的安装、配置和使用方法，以备不时查阅。文中的常用工具仅对个人而言，请读者酌情使用。 系统的基本安装系统安装的教程可以考虑阅读**官方文档**，这里仅做简述。 系统安装包括硬盘分区，基本的软件系统安装和配置，bootloader和网络工具的安装。 分区时候应注意是否是双系统，如果都是EFI启动的话，注意不要设置独立的EFI分区，而是应该将Windows的EF">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2021-01-02T17:01:16.212Z">
-<meta property="article:modified_time" content="2021-01-03T04:09:21.739Z">
+<meta property="article:published_time" content="2021-09-14T16:21:39.937Z">
+<meta property="article:modified_time" content="2021-09-14T16:26:11.612Z">
 <meta property="article:author" content="Homalozoa X">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://paeunt.github.io/2021/01/03/modified_archlinux/">
+<link rel="canonical" href="https://homalozoa.github.io/2021/09/15/modified_archlinux/">
 
 
 <script id="page-configurations">
@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://paeunt.github.io/2021/01/03/modified_archlinux/">
+    <link itemprop="mainEntityOfPage" href="https://homalozoa.github.io/2021/09/15/modified_archlinux/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -174,7 +174,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2021-01-03 01:01:16 / Modified: 12:09:21" itemprop="dateCreated datePublished" datetime="2021-01-03T01:01:16+08:00">2021-01-03</time>
+              <time title="Created: 2021-09-15 00:21:39 / Modified: 00:26:11" itemprop="dateCreated datePublished" datetime="2021-09-15T00:21:39+08:00">2021-09-15</time>
             </span>
 
           
@@ -206,8 +206,7 @@
 <h4 id="GNOME的常用插件"><a href="#GNOME的常用插件" class="headerlink" title="GNOME的常用插件"></a>GNOME的常用插件</h4><p>通过Tweaks可以极大程度上地定制自己喜欢的GNOME界面并添加提高生产力的插件。</p>
 <ul>
 <li><code>gnome-shell-extension-gsconnect</code> 局域网内连接Android设备的插件，共享消息、文件、文件夹和互控，很便捷，可以多设备间互传，不只局限于两设备。</li>
-<li><code>gnome-shell-extension-topicons-plus-git</code> 顶栏显示图标的插件。</li>
-<li><code>gnome-shell-extension-appindicator-git</code> 收集各种常驻程序在顶栏，和上一条相似。</li>
+<li><code>gnome-shell-extension-appindicator-git</code> 收集各种常驻程序在顶栏。</li>
 <li><code>kimpanel 给fcitx5暂时接锅的插件，因为fcitx5在基于wayland的软件如Libreoffice上不显示</code>预选栏`，通过这个插件可以缓解。</li>
 <li><code>refresh-wifi</code> 提供在顶栏选择Wi-Fi时的刷新按钮。</li>
 </ul>
@@ -264,7 +263,7 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/01/03/ros2_build_install/" rel="prev" title="ROS 2编译与安装">
+    <a href="/2021/09/15/ros2_build_install/" rel="prev" title="ROS 2编译与安装">
       <i class="fa fa-chevron-left"></i> ROS 2编译与安装
     </a></div>
       <div class="post-nav-item"></div>
