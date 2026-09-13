@@ -1,0 +1,26 @@
+[
+  {
+    "slug": "modified_archlinux",
+    "title": "定制自由的生产力工具 —— Arch Linux",
+    "date": "2021-09-15",
+    "published": "2021-09-14T16:21:39.937Z",
+    "modified": "2021-09-14T16:26:11.612Z",
+    "category": "LINUX",
+    "label": "系统与工具",
+    "summary": "从系统安装到桌面环境，记录一套顺手的 Arch Linux 工作环境。",
+    "path": "/2021/09/15/modified_archlinux/",
+    "cardTitle": ["定制自由的生产力工具", "Arch Linux"]
+  },
+  {
+    "slug": "ros2_build_install",
+    "title": "ROS 2编译与安装",
+    "date": "2021-09-15",
+    "published": "2021-09-14T16:21:39.937Z",
+    "modified": "2021-09-14T16:43:05.528Z",
+    "category": "ROBOTICS",
+    "label": "机器人开发",
+    "summary": "在 Arch Linux 与 Ubuntu 上，从源码编译、安装和配置 ROS 2 Galactic。",
+    "path": "/2021/09/15/ros2_build_install/",
+    "cardTitle": ["ROS 2", "编译与安装"]
+  }
+]
