@@ -51,8 +51,8 @@ if (article) {
   }
 
   const toc = document.querySelector(".toc");
-  if (window.matchMedia("(max-width: 900px)").matches) toc.open = false;
-  const tocLinks = [...toc.querySelectorAll("a")];
+  if (toc && window.matchMedia("(max-width: 900px)").matches) toc.open = false;
+  const tocLinks = [...(toc?.querySelectorAll("a") ?? [])];
   const headings = [...article.querySelectorAll("h2[id]")];
   const progress = document.querySelector(".reading-progress span");
   let scheduled = false;

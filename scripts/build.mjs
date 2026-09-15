@@ -158,6 +158,9 @@ for (const post of posts) {
         `<li><a href="#${encodeURIComponent(heading.id)}"><span>${String(index + 1).padStart(2, "0")}</span>${heading.title}</a></li>`,
     )
     .join("");
+  const tocPanel = toc
+    ? `<details class="toc" open><summary>本篇目录 <span>CONTENTS</span></summary><nav aria-label="文章目录"><ol>${toc}</ol></nav></details>`
+    : "";
   const otherPosts = posts.filter((other) => other.slug !== post.slug);
   await write(
     post.path,
@@ -167,7 +170,7 @@ for (const post of posts) {
       route: post.path,
       kind: "article",
       post,
-      content: `<div class="reading-progress" aria-hidden="true"><span></span></div><main id="main"><header class="article-header"><a href="/archives/" class="back-link">← 全部文章</a><div class="article-kicker"><span class="tag">${post.category}</span><span>${post.label}</span><time datetime="${post.date}">${post.date.replaceAll("-", ".")}</time></div><h1>${escape(post.title)}</h1><p class="article-byline">BY HOMALOZOA X <span>/ A PERSONAL JOURNAL</span></p></header><div class="article-layout"><aside class="toc-sidebar"><details class="toc" open><summary>本篇目录 <span>CONTENTS</span></summary><nav aria-label="文章目录"><ol>${toc}</ol></nav></details><a href="#top" class="toc-top">↑ 回到顶部</a></aside><article class="article-body" aria-label="文章正文">${body}</article></div>${otherPosts.length ? `<nav class="next-note" aria-label="继续阅读"><span class="eyebrow">NEXT NOTE / 继续阅读</span><a href="${otherPosts[0].path}"><h2>${escape(otherPosts[0].title)}</h2>${arrow}</a></nav>` : ""}</main>`,
+      content: `<div class="reading-progress" aria-hidden="true"><span></span></div><main id="main"><header class="article-header"><a href="/archives/" class="back-link">← 全部文章</a><div class="article-kicker"><span class="tag">${post.category}</span><span>${post.label}</span><time datetime="${post.date}">${post.date.replaceAll("-", ".")}</time></div><h1>${escape(post.title)}</h1><p class="article-byline">BY HOMALOZOA X <span>/ A PERSONAL JOURNAL</span></p></header><div class="article-layout"><aside class="toc-sidebar">${tocPanel}<a href="#top" class="toc-top">↑ 回到顶部</a></aside><article class="article-body" aria-label="文章正文">${body}</article></div>${otherPosts.length ? `<nav class="next-note" aria-label="继续阅读"><span class="eyebrow">NEXT NOTE / 继续阅读</span><a href="${otherPosts[0].path}"><h2>${escape(otherPosts[0].title)}</h2>${arrow}</a></nav>` : ""}</main>`,
     }),
   );
 }
