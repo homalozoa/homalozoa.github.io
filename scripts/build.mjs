@@ -37,7 +37,7 @@ function shell({
 <meta name="theme-color" content="#ff6846">
 <title>${escape(title)}</title>
 <meta name="description" content="${escape(description)}">
-<meta name="author" content="Homalozoa X">
+<meta name="author" content="海果">
 <link rel="canonical" href="${origin}${route}">
 <meta property="og:type" content="${post ? "article" : "website"}">
 <meta property="og:title" content="${escape(title)}">
@@ -46,7 +46,7 @@ function shell({
 <meta property="og:site_name" content="海果不能吃">
 <meta property="og:locale" content="zh_CN">
 <meta name="twitter:card" content="summary">
-${post ? `<meta property="article:published_time" content="${post.published}"><meta property="article:modified_time" content="${post.modified}"><meta property="article:author" content="Homalozoa X">` : ""}
+${post ? `<meta property="article:published_time" content="${post.published}"><meta property="article:modified_time" content="${post.modified}"><meta property="article:author" content="海果">` : ""}
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="/assets/site.css">
 <script src="/assets/site.js" defer></script>
@@ -151,7 +151,7 @@ for (const post of posts) {
       route: post.path,
       kind: "article",
       post,
-      content: `<div class="reading-progress" aria-hidden="true"><span></span></div><main id="main"><header class="article-header"><a href="/archives/" class="back-link">← 全部文章</a><div class="article-kicker"><span class="tag">${post.category}</span><span>${post.label}</span><time datetime="${post.date}">${post.date.replaceAll("-", ".")}</time></div><h1>${escape(post.title)}</h1><p class="article-byline">BY HOMALOZOA X <span>/ 海果不能吃</span></p></header><div class="article-layout"><aside class="toc-sidebar">${tocPanel}<a href="#top" class="toc-top">↑ 回到顶部</a></aside><article class="article-body" aria-label="文章正文">${body}</article></div>${otherPosts.length ? `<nav class="next-note" aria-label="继续阅读"><span class="eyebrow">NEXT NOTE / 继续阅读</span><a href="${otherPosts[0].path}"><h2>${escape(otherPosts[0].title)}</h2>${arrow}</a></nav>` : ""}</main>`,
+      content: `<div class="reading-progress" aria-hidden="true"><span></span></div><main id="main"><header class="article-header"><a href="/archives/" class="back-link">← 全部文章</a><div class="article-kicker"><span class="tag">${post.category}</span><span>${post.label}</span><time datetime="${post.date}">${post.date.replaceAll("-", ".")}</time></div><h1>${escape(post.title)}</h1><p class="article-byline">BY HOMALOZOA X <span>/ 海果</span></p></header><div class="article-layout"><aside class="toc-sidebar">${tocPanel}<a href="#top" class="toc-top">↑ 回到顶部</a></aside><article class="article-body" aria-label="文章正文">${body}</article></div>${otherPosts.length ? `<nav class="next-note" aria-label="继续阅读"><span class="eyebrow">NEXT NOTE / 继续阅读</span><a href="${otherPosts[0].path}"><h2>${escape(otherPosts[0].title)}</h2>${arrow}</a></nav>` : ""}</main>`,
     }),
   );
 }
