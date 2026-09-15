@@ -1,9 +1,9 @@
 {
-  "name": "carboniferous",
-  "version": "2.0.0",
+  "name": "homalozoa-is-not-for-eating",
+  "version": "3.0.0",
   "private": true,
   "type": "module",
-  "description": "Carboniferous — Homalozoa X 的技术笔记",
+  "description": "海果不能吃 — Homalozoa X 的个人博客",
   "scripts": {
     "build": "node scripts/build.mjs",
     "dev": "node scripts/serve.mjs",

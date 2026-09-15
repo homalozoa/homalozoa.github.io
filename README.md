@@ -1,6 +1,6 @@
-# Carboniferous · 石炭纪
+# 海果不能吃
 
-Homalozoa X 的个人博客，记录对世界的观察、阅读与思考。以荧光黄绿、杂志排版和金属化石为视觉语言；文章页提供目录、代码复制和阅读进度。
+Homalozoa X 的个人博客，收集那些暂时说不出用途的观察、疑问与兴趣。英文名为 “Homalozoa is not for eating.”。界面以少量后现代色块、线条和几何图形作为装饰；文章页提供目录、代码复制和阅读进度。
 
 本站从旧 Hexo / NexT 静态输出迁移而来。两篇历史文章的正文、代码、发布时间、修改时间和永久链接均保留；正文标题从 `h4` 调整为 `h2`，原有标题锚点不变。文章仍是 2021 年的记录，重构不代表技术内容已更新。
 
@@ -26,7 +26,7 @@ npm run check
 - `content/posts.json`：文章标题、摘要、分类、日期与永久链接。可选的 `cardTitle` 数组控制首页标题分行；省略时直接使用文章标题。分类不限于技术；其他分类默认使用文章序号封面，不会套用 Linux 或 ROS 的图案。
 - `content/posts/*.html`：文章正文。保留 HTML 源码可以完整迁移原有代码高亮，无需重新安装旧主题。
 - `scripts/build.mjs`：公共模板、首页、文章页、按年/月归档及 404 页面生成。
-- `assets/site.css`、`assets/site.js`：网站样式及渐进增强。禁用 JavaScript 后仍可阅读文章、导航和展开目录。
+- `assets/site.css`、`assets/site.js`：网站样式及文章页渐进增强。
 - 根目录、`2021/`、`archives/` 中的 HTML：可直接发布的生成结果，请通过源文件修改并重新生成。
 
 新增文章时，在 `content/posts/` 中创建与 `slug` 同名的 HTML，将文章信息添加到 `content/posts.json`（最新在前），运行构建与检查。`path` 填写以 `/` 开头和结尾的永久链接；`published`、`modified` 使用带时区的 ISO 8601 时间。正文顶层标题使用 `h2` 并设置唯一 `id`，即可生成目录。
@@ -39,12 +39,14 @@ npm run check
 
 ## 资源
 
-字体 Anton 与 Space Grotesk 从 Google Fonts 获取，已保存在 `assets/fonts/`，各自 SIL Open Font License 同目录保留。页面不请求外部字体或脚本。
+字体 Anton 与 Space Grotesk 从 Google Fonts 获取，已保存在 `assets/fonts/`，各自 SIL Open Font License 同目录保留。
 
-`assets/fossil.webp` 由内置 imagegen 生成，再转换为 WebP。生成简述：单个银色铬金属螺旋化石，粗糙化石纹理与抛光高光，荧光黄绿背景、居中构图、影棚光照，无文字、标志或额外物件。完整生成提示词见 `assets/fossil-prompt.txt`。它是艺术作品，不是科学复原。
+## 视觉与操作原则
+
+首页以内容为主，只保留珊瑚橙、钴蓝和黄绿色的几何装饰。标题和最近文章在首屏内即可出现，正文使用正常字体、行距和列宽；移动端改为单列，整页没有水平滚动。除滚动和链接状态外不使用持续动画。
 
 旧站 `images/` 资源和根目录 `LICENSE` 保留。
 
 ## 首页引文
 
-首页题辞节选自 Octavia E. Butler 的《播种者寓言》（*Parable of the Sower*, 1993）。英文依据 [Hachette 出版社页面](https://www.hachette.co.nz/octavia-e-butler/parable-of-the-sower-the-new-york-times-bestseller) 核对，中文为本站译文，不冒用已出版中译本的措辞或译者署名。页面显示作者、作品、年份与出处链接。
+首页题辞节选自 Octavia E. Butler 的《播种者寓言》（_Parable of the Sower_, 1993）。英文依据 [Hachette 出版社页面](https://www.hachette.co.nz/octavia-e-butler/parable-of-the-sower-the-new-york-times-bestseller) 核对，中文为本站译文，不冒用已出版中译本的措辞或译者署名。页面显示作者、作品、年份与出处链接。

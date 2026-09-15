@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#dfff70">
-<title>定制自由的生产力工具 —— Arch Linux · Carboniferous</title>
+<meta name="theme-color" content="#ff6846">
+<title>定制自由的生产力工具 —— Arch Linux · 海果不能吃</title>
 <meta name="description" content="从系统安装到桌面环境，记录一套顺手的 Arch Linux 工作环境。">
 <meta name="author" content="Homalozoa X">
 <link rel="canonical" href="https://homalozoa.github.io/2021/09/15/modified_archlinux/">
 <meta property="og:type" content="article">
-<meta property="og:title" content="定制自由的生产力工具 —— Arch Linux · Carboniferous">
+<meta property="og:title" content="定制自由的生产力工具 —— Arch Linux · 海果不能吃">
 <meta property="og:description" content="从系统安装到桌面环境，记录一套顺手的 Arch Linux 工作环境。">
 <meta property="og:url" content="https://homalozoa.github.io/2021/09/15/modified_archlinux/">
-<meta property="og:site_name" content="Carboniferous">
+<meta property="og:site_name" content="海果不能吃">
 <meta property="og:locale" content="zh_CN">
 <meta name="twitter:card" content="summary">
 <meta property="article:published_time" content="2021-09-14T16:21:39.937Z"><meta property="article:modified_time" content="2021-09-14T16:26:11.612Z"><meta property="article:author" content="Homalozoa X">
@@ -23,10 +23,10 @@
 <body class="page-article" id="top">
 <a class="skip-link" href="#main">跳到内容</a>
 <header class="site-header">
-  <a href="/" class="brand" aria-label="Carboniferous 首页"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M30 9H15L7 20l8 11h15v-9H19v-4h11Z" fill="currentColor"/></svg><span>HOMALOZOA X<span class="brand-sub">A PERSONAL JOURNAL</span></span></a>
+  <a href="/" class="brand" aria-label="海果不能吃首页"><span class="brand-mark" aria-hidden="true">×</span><span>海果不能吃<span class="brand-sub">Homalozoa is not for eating.</span></span></a>
   <nav aria-label="主导航"><a href="/" >首页<span>INDEX</span></a><a href="/archives/" >归档<span>ARCHIVE</span></a><a class="github-link" href="https://github.com/homalozoa" target="_blank" rel="noopener noreferrer">GitHub <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg><span class="sr-only">（新窗口）</span></a></nav>
 </header>
-<div class="reading-progress" aria-hidden="true"><span></span></div><main id="main"><header class="article-header"><a href="/archives/" class="back-link">← 全部文章</a><div class="article-kicker"><span class="tag">LINUX</span><span>系统与工具</span><time datetime="2021-09-15">2021.09.15</time></div><h1>定制自由的生产力工具 —— Arch Linux</h1><p class="article-byline">BY HOMALOZOA X <span>/ A PERSONAL JOURNAL</span></p></header><div class="article-layout"><aside class="toc-sidebar"><details class="toc" open><summary>本篇目录 <span>CONTENTS</span></summary><nav aria-label="文章目录"><ol><li><a href="#%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%AE%89%E8%A3%85"><span>01</span>系统的基本安装</a></li><li><a href="#GNOME%E7%9A%84%E5%B8%B8%E7%94%A8%E6%8F%92%E4%BB%B6"><span>02</span>GNOME的常用插件</a></li><li><a href="#GNOME%E7%9A%84%E4%B8%BB%E9%A2%98"><span>03</span>GNOME的主题</a></li><li><a href="#%E7%94%9F%E4%BA%A7%E5%8A%9B%E5%B7%A5%E5%85%B7"><span>04</span>生产力工具</a></li><li><a href="#%E5%8F%8C%E6%98%BE%E5%8D%A1%E7%9A%84%E6%94%AF%E6%8C%81%E9%97%AE%E9%A2%98"><span>05</span>双显卡的支持问题</a></li><li><a href="#%E5%A2%9E%E5%8A%A0emoji%E7%9A%84%E6%94%AF%E6%8C%81"><span>06</span>增加emoji的支持</a></li></ol></nav></details><a href="#top" class="toc-top">↑ 回到顶部</a></aside><article class="article-body" aria-label="文章正文"><p>本文记录了一些在Arch Linux环境下的安装、配置和使用方法，以备不时查阅。文中的常用工具仅对个人而言，请读者酌情使用。</p>
+<div class="reading-progress" aria-hidden="true"><span></span></div><main id="main"><header class="article-header"><a href="/archives/" class="back-link">← 全部文章</a><div class="article-kicker"><span class="tag">LINUX</span><span>系统与工具</span><time datetime="2021-09-15">2021.09.15</time></div><h1>定制自由的生产力工具 —— Arch Linux</h1><p class="article-byline">BY HOMALOZOA X <span>/ 海果不能吃</span></p></header><div class="article-layout"><aside class="toc-sidebar"><details class="toc" open><summary>本篇目录 <span>CONTENTS</span></summary><nav aria-label="文章目录"><ol><li><a href="#%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%AE%89%E8%A3%85"><span>01</span>系统的基本安装</a></li><li><a href="#GNOME%E7%9A%84%E5%B8%B8%E7%94%A8%E6%8F%92%E4%BB%B6"><span>02</span>GNOME的常用插件</a></li><li><a href="#GNOME%E7%9A%84%E4%B8%BB%E9%A2%98"><span>03</span>GNOME的主题</a></li><li><a href="#%E7%94%9F%E4%BA%A7%E5%8A%9B%E5%B7%A5%E5%85%B7"><span>04</span>生产力工具</a></li><li><a href="#%E5%8F%8C%E6%98%BE%E5%8D%A1%E7%9A%84%E6%94%AF%E6%8C%81%E9%97%AE%E9%A2%98"><span>05</span>双显卡的支持问题</a></li><li><a href="#%E5%A2%9E%E5%8A%A0emoji%E7%9A%84%E6%94%AF%E6%8C%81"><span>06</span>增加emoji的支持</a></li></ol></nav></details><a href="#top" class="toc-top">↑ 回到顶部</a></aside><article class="article-body" aria-label="文章正文"><p>本文记录了一些在Arch Linux环境下的安装、配置和使用方法，以备不时查阅。文中的常用工具仅对个人而言，请读者酌情使用。</p>
 <h2 id="系统的基本安装"><a href="#系统的基本安装" class="headerlink" title="系统的基本安装"></a>系统的基本安装</h2><p>系统安装的教程可以考虑阅读**<a target="_blank" rel="noopener" href="https://wiki.archlinux.org/index.php/Installation_guide">官方文档</a>**，这里仅做简述。</p>
 <p>系统安装包括硬盘分区，基本的软件系统安装和配置，<code>bootloader</code>和<em>网络工具</em>的安装。</p>
 <p>分区时候应注意是否是双系统，如果都是EFI启动的话，注意不要设置独立的EFI分区，而是应该将Windows的EFI分区嵌入Linux的<code>/boot</code>分区下。如我的分区情况如下：</p>
@@ -82,6 +82,6 @@
 <p>再执行刷新字体缓存指令即可。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> fc-cache</span></span><br></pre></td></tr></table></figure>
 </article></div><nav class="next-note" aria-label="继续阅读"><span class="eyebrow">NEXT NOTE / 继续阅读</span><a href="/2026/09/15/agent-authorship/"><h2>Agent做完了，“我做的”还算数吗？</h2><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14" stroke="currentColor" stroke-width="1.5"/></svg></a></nav></main>
-<footer class="site-footer"><a href="/" class="footer-name">Carboniferous<span>石炭纪</span></a><div class="footer-bottom"><span>© 2021–2026 Homalozoa X</span><span class="footer-motto">观察 · 阅读 · 思考</span><a href="#top">回到顶部 ↑</a></div></footer>
+<footer class="site-footer"><a href="/" class="footer-name">海果不能吃<span>Homalozoa is not for eating.</span></a><div class="footer-bottom"><span>© 2021–2026 Homalozoa X</span><span class="footer-motto">观察 · 阅读 · 实践</span><a href="#top">回到顶部 ↑</a></div></footer>
 </body>
 </html>

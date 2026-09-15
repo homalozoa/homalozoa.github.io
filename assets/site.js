@@ -1,6 +1,7 @@
-// All articles, links, and the table of contents work without JavaScript.
-const article = document.querySelector(".article-body");
-if (article) {
+function initArticle() {
+  const article = document.querySelector(".article-body");
+  if (!article) return;
+
   const status = document.createElement("span");
   status.className = "sr-only";
   status.setAttribute("role", "status");
@@ -8,11 +9,14 @@ if (article) {
 
   for (const figure of article.querySelectorAll("figure.highlight")) {
     const pre = figure.querySelector(".code pre");
-    if (!pre) continue;
+    const table = figure.querySelector("table");
+    if (!pre || !table) continue;
+
     const caption = document.createElement("figcaption");
     const label = document.createElement("span");
     label.textContent =
       [...figure.classList].find((value) => value !== "highlight") || "CODE";
+
     const copy = document.createElement("button");
     copy.type = "button";
     copy.textContent = "复制代码";
@@ -21,6 +25,7 @@ if (article) {
       const code = lines.length
         ? lines.map((line) => line.textContent).join("\n")
         : pre.textContent;
+
       try {
         await navigator.clipboard.writeText(code);
         copy.textContent = "已复制 ✓";
@@ -34,13 +39,15 @@ if (article) {
         copy.textContent = "请手动复制";
         status.textContent = "已选中代码，请按系统复制快捷键";
       }
+
       setTimeout(() => {
         copy.textContent = "复制代码";
       }, 2200);
     });
+
     caption.append(label, copy);
     figure.prepend(caption);
-    const table = figure.querySelector("table");
+
     const viewport = document.createElement("div");
     viewport.className = "code-viewport";
     viewport.tabIndex = 0;
@@ -51,32 +58,46 @@ if (article) {
   }
 
   const toc = document.querySelector(".toc");
-  if (toc && window.matchMedia("(max-width: 900px)").matches) toc.open = false;
+  if (toc && window.matchMedia("(max-width: 800px)").matches) toc.open = false;
+
   const tocLinks = [...(toc?.querySelectorAll("a") ?? [])];
   const headings = [...article.querySelectorAll("h2[id]")];
   const progress = document.querySelector(".reading-progress span");
   let scheduled = false;
+
   const updateReading = () => {
     const start = article.getBoundingClientRect().top + window.scrollY;
     const distance = Math.max(1, article.offsetHeight - window.innerHeight);
-    progress.style.transform = `scaleX(${Math.min(1, Math.max(0, (window.scrollY - start) / distance))})`;
+    const amount = Math.min(
+      1,
+      Math.max(0, (window.scrollY - start) / distance),
+    );
+    progress.style.transform = `scaleX(${amount})`;
+
     let current;
-    for (const heading of headings)
+    for (const heading of headings) {
       if (heading.getBoundingClientRect().top <= 160) current = heading.id;
+    }
+
     for (const link of tocLinks) {
-      if (decodeURIComponent(link.hash.slice(1)) === current)
+      if (decodeURIComponent(link.hash.slice(1)) === current) {
         link.setAttribute("aria-current", "location");
-      else link.removeAttribute("aria-current");
+      } else {
+        link.removeAttribute("aria-current");
+      }
     }
     scheduled = false;
   };
+
   const scheduleUpdate = () => {
-    if (!scheduled) {
-      scheduled = true;
-      requestAnimationFrame(updateReading);
-    }
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(updateReading);
   };
+
   window.addEventListener("scroll", scheduleUpdate, { passive: true });
   window.addEventListener("resize", scheduleUpdate);
   updateReading();
 }
+
+initArticle();

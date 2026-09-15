@@ -68,5 +68,12 @@ for post in POSTS:
 css = (ROOT / 'assets/site.css').read_text()
 for reference in re.findall(r'url\([\'"]?(/[^\)\'\"]+)', css):
     assert (ROOT / reference.lstrip('/')).is_file(), f'Missing CSS asset: {reference}'
+site_javascript = (ROOT / 'assets/site.js').read_text()
+homepage = (ROOT / 'index.html').read_text()
+assert 'Homalozoa is not for eating.' in homepage, 'The requested English site name is missing'
+assert all('Homalozoa is not for eating.' in file.read_text() for file in files), 'The English site name is inconsistent'
+assert '>×<' not in homepage and '>H<' in homepage, 'The Homalozoa H mark is inconsistent'
+assert 'pelican-game' not in homepage and '<canvas' not in homepage, 'The removed game is still present'
+assert all('Carboniferous' not in file.read_text() for file in files), 'Old site name remains in generated pages'
 assert not re.search(r'(?:hexo-configurations|/js/next-boot|/lib/velocity)', '\n'.join(file.read_text() for file in files)), 'Old theme runtime is still loaded'
 print(f'Passed: {len(pages)} pages, local assets, navigation anchors, and {len(POSTS)} complete articles.')
