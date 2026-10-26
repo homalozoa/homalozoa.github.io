@@ -106,10 +106,8 @@ function filters(selectedPosts) {
   return `<div class="post-filters" role="group" aria-label="按文章分类筛选" hidden><button type="button" data-filter="all" aria-pressed="true">全部<span>${String(selectedPosts.length).padStart(2, "0")}</span></button>${categories.map(([category, label]) => `<button type="button" data-filter="${escape(category)}" aria-pressed="false">${escape(label)}</button>`).join("")}</div><p class="sr-only filter-status" role="status" aria-live="polite"></p>`;
 }
 
-function postCard(post, index) {
-  const number = String(index + 1).padStart(2, "0");
-  const symbols = ["◎", "△", "✳"];
-  return `<a href="${post.path}" class="post-card" data-category="${escape(post.category)}"><div class="card-art art-${index % 3}" aria-hidden="true"><span class="card-planet"></span><span class="art-orbit"></span><span class="art-cross">+</span><span class="art-caption">${escape(post.category)} / ${number}</span><span class="art-symbol">${symbols[index % 3]}</span></div><div class="card-content"><div class="card-meta"><span class="tag">${escape(post.label)}</span><time datetime="${post.date}">${post.date.replaceAll("-", ".")}</time></div><h3>${escape(post.title)}</h3><p>${escape(post.summary)}</p><span class="card-read">阅读全文 ${arrow}</span></div></a>`;
+function postCard(post) {
+  return `<a href="${post.path}" class="post-card" data-category="${escape(post.category)}"><div class="card-content"><div class="card-meta"><span class="tag">${escape(post.label)}</span><time datetime="${post.date}">${post.date.replaceAll("-", ".")}</time></div><h3>${escape(post.title)}</h3><p>${escape(post.summary)}</p><span class="card-read">阅读全文 ${arrow}</span></div></a>`;
 }
 
 function home() {

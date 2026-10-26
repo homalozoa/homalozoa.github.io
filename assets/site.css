@@ -509,147 +509,11 @@ summary:focus-visible,
 .post-card:hover {
   border-color: var(--accent);
 }
-.card-art {
-  position: relative;
-  height: 192px;
-  overflow: hidden;
-  background: #294649;
-  isolation: isolate;
-}
-.card-art::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' opacity='.14' filter='url(%23n)'/%3E%3C/svg%3E");
-  opacity: 0.35;
-  pointer-events: none;
-}
-.card-planet {
-  position: absolute;
-  left: 50%;
-  top: 48%;
-  width: 115px;
-  height: 115px;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(
-    circle at 28% 28%,
-    #e6ceab,
-    #a58b6e 35%,
-    #5f6e67 65%,
-    #304948 82%
-  );
-  box-shadow: 0 0 50px #a4b8a914;
-  transition: transform 0.6s;
-}
-.art-orbit {
-  position: absolute;
-  width: 220px;
-  height: 65px;
-  border: 1px solid #a9b9a45c;
-  border-radius: 50%;
-  left: 50%;
-  top: 48%;
-  transform: translate(-50%, -50%) rotate(-28deg);
-}
-.art-cross {
-  position: absolute;
-  top: 14px;
-  left: 17px;
-  color: #e0cbb4;
-  font: 300 16px/1 var(--mono);
-}
-.art-caption {
-  position: absolute;
-  left: 17px;
-  bottom: 16px;
-  font-size: 8px;
-  letter-spacing: 0.2em;
-  color: #c4cebd;
-}
-.art-symbol {
-  position: absolute;
-  right: 16px;
-  bottom: 14px;
-  color: #bdc9bd;
-  font-size: 18px;
-  font-weight: 300;
-}
-.art-1 {
-  background:
-    radial-gradient(ellipse at 40% 120%, #9d7050, transparent 70%), #3c3c34;
-}
-.art-1 .card-planet {
-  width: 130px;
-  height: 130px;
-  left: 54%;
-  top: 72%;
-  background:
-    repeating-radial-gradient(
-      ellipse at 30% 30%,
-      transparent 0 8px,
-      #d6bb8e33 9px 10px,
-      transparent 11px 17px
-    ),
-    radial-gradient(circle at 20% 20%, #d2af7a, #695a43 60%, #3e453d);
-  box-shadow:
-    0 0 0 25px #b6986910,
-    0 0 0 50px #b698690b;
-}
-.art-1 .art-orbit {
-  width: 225px;
-  height: 225px;
-  border-color: #c3a37c40;
-  transform: translate(-50%, -50%) rotate(25deg);
-  border-radius: 3px;
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
-}
-.art-2 {
-  background:
-    radial-gradient(ellipse at 60% 90%, #3b6267, transparent 80%), #233c49;
-}
-.art-2 .card-planet {
-  width: 92px;
-  height: 92px;
-  left: 53%;
-  background: radial-gradient(
-    circle at 22% 20%,
-    #c2d4d0,
-    #67949b 30%,
-    #2b545e 65%,
-    #1a333e
-  );
-  box-shadow:
-    -55px -30px 0 -37px #bdc8b7,
-    0 0 0 1px #a8c3c03a;
-}
-.art-2 .art-orbit {
-  width: 185px;
-  height: 185px;
-  border-color: #bad4ce38;
-  transform: translate(-50%, -50%);
-}
-.art-2 .art-orbit::before,
-.art-2 .art-orbit::after {
-  content: "";
-  position: absolute;
-  inset: 20px;
-  border: 1px dashed #adc8c23d;
-  border-radius: 50%;
-}
-.art-2 .art-orbit::after {
-  inset: -20px;
-  border-style: solid;
-  border-color: #adc8c218;
-}
-.post-card:hover .card-planet {
-  transform: translate(-50%, -50%) scale(1.07);
-}
 .card-content {
   display: flex;
   flex-direction: column;
   flex: 1;
-  padding: 24px 0 22px;
+  padding: 4px 0 22px;
 }
 .card-meta {
   display: flex;
@@ -1358,9 +1222,6 @@ summary:focus-visible,
   .post-grid {
     gap: 22px;
   }
-  .card-art {
-    height: 165px;
-  }
   .card-content h3 {
     font-size: 19px;
   }
@@ -1423,14 +1284,7 @@ summary:focus-visible,
     grid-template-columns: 1fr;
   }
   .post-card {
-    display: grid;
-    grid-template-columns: 220px minmax(0, 1fr);
-    gap: 25px;
     padding-block: 20px;
-    align-items: center;
-  }
-  .card-art {
-    height: 195px;
   }
   .card-content {
     padding: 0 0 3px;
@@ -1664,16 +1518,10 @@ summary:focus-visible,
     min-height: 28px;
   }
   .post-card {
-    grid-template-columns: 1fr;
-    gap: 0;
     padding-block: 24px;
   }
-  .card-art {
-    height: 200px;
-  }
   .card-content {
-    padding-top: 22px;
-    padding-bottom: 4px;
+    padding: 0 0 4px;
   }
   .card-content h3 {
     font-size: 22px;
