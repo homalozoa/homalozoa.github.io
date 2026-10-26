@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>写作室 · 海果不能吃</title>
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/editor.css">
+  <script type="module" src="/editor.js"></script>
+</head>
+<body>
+  <aside class="library" aria-label="文章库">
+    <a class="brand" href="/" aria-label="写作室首页"><span class="brand-mark">H</span><span>海果不能吃<small>THE WRITING ROOM</small></span></a>
+    <button class="new-button" id="new"><span>＋</span> 写一篇新的</button>
+    <label class="search"><span>⌕</span><input type="search" id="search" placeholder="寻找一篇文字…" aria-label="搜索文章"></label>
+    <div class="library-tabs" role="tablist" aria-label="文章类型"><button role="tab" id="draft-tab" aria-selected="true">草稿 <span id="draft-count">0</span></button><button role="tab" id="post-tab" aria-selected="false">站点文章 <span id="post-count">0</span></button></div>
+    <div id="article-list" class="article-list" role="tabpanel" aria-label="文章列表"></div>
+    <div class="library-footer"><span class="local-dot"></span> 仅在这台电脑上<small>把还没想清楚的，也先写下来。</small></div>
+  </aside>
+  <main class="workspace">
+    <header class="topbar"><div class="breadcrumb">写作室 <span>/</span> <span id="document-name">新的草稿</span></div><div class="top-actions"><span id="save-status" role="status">等待落笔</span><button id="save">保存草稿</button><button class="primary" id="apply">写入本地站点 <span>↗</span></button></div></header>
+    <div class="workspace-bar"><div class="view-tabs" role="group" aria-label="工作区视图"><button data-view="write" aria-pressed="false">写作</button><button data-view="split" aria-pressed="true">对照预览</button><button data-view="preview" aria-pressed="false">阅读</button></div><div class="utility-actions"><button id="import">导入</button><input type="file" id="import-file" accept=".json,.html,.htm,.txt" hidden><button id="export">导出草稿</button><button id="settings" aria-expanded="false" aria-controls="metadata">文章设置 <span>☷</span></button></div></div>
+    <div id="notice" class="notice" role="status" hidden></div>
+    <div class="work-area" data-view="split" id="work-area">
+      <section class="writing-pane" aria-label="文章编辑">
+        <div class="sheet-heading"><p class="eyebrow">A NOTE IN PROGRESS <span>✳</span></p><label class="sr-only" for="title">文章标题</label><textarea id="title" rows="2" placeholder="给这段想法，一个名字。"></textarea><div class="sheet-subline"><span id="writing-label">观察与思考</span><span id="word-count">0 字 · 约 1 分钟</span></div></div>
+        <div class="format-bar" role="toolbar" aria-label="正文格式"><button data-command="formatBlock" data-value="p" title="正文段落" aria-label="正文段落">正文</button><button data-command="formatBlock" data-value="h2" title="二级标题" aria-label="二级标题">H₂</button><button data-command="formatBlock" data-value="h3" title="三级标题" aria-label="三级标题">H₃</button><i></i><button data-command="bold" title="加粗" aria-label="加粗"><b>B</b></button><button data-command="italic" title="斜体" aria-label="斜体"><em>I</em></button><button data-command="formatBlock" data-value="blockquote" title="引用" aria-label="引用">❞</button><button data-command="insertUnorderedList" title="无序列表" aria-label="无序列表">≡</button><button data-command="insertOrderedList" title="有序列表" aria-label="有序列表">1.</button><i></i><button id="link" title="插入链接" aria-label="插入链接">链接</button><button id="image" title="插入图片" aria-label="插入图片">图片</button><button id="code" title="代码块" aria-label="代码块">&lt;/&gt;</button><button id="source-toggle" aria-pressed="false">HTML</button></div>
+        <div class="body-wrap"><div id="body" class="article-body" contenteditable="true" role="textbox" aria-label="文章正文" aria-multiline="true" data-placeholder="从一个观察、一次疑问，或一件具体的小事开始。"></div><label class="sr-only" for="source">HTML 正文源码</label><textarea id="source" spellcheck="false" hidden></textarea></div>
+        <footer class="sheet-footer"><span id="source-hint">草稿自动保存在本机</span><span>HOMALOZOA / 海果</span></footer>
+      </section>
+      <section class="preview-pane" aria-label="文章预览"><header class="preview-bar"><span><span class="local-dot"></span> 阅读预览</span><div><button id="desktop-preview" aria-pressed="true" aria-label="桌面预览">宽屏</button><button id="mobile-preview" aria-pressed="false" aria-label="手机预览">手机</button></div></header><div class="preview-stage"><iframe id="preview" title="文章阅读预览" sandbox="allow-same-origin" referrerpolicy="no-referrer"></iframe></div></section>
+      <aside id="metadata" class="metadata" hidden><div class="metadata-heading"><h2>文章设置</h2><button id="close-settings" aria-label="关闭文章设置">×</button></div><p>这些信息会出现在首页和文章页。</p><label>网址标识 <span>slug</span><input id="slug" placeholder="a-small-observation" autocomplete="off" spellcheck="false"></label><small>小写英文、数字、短横线或下划线。已有文章保留原网址。</small><label>发布时间 <span>UTC+8</span><input id="published" type="datetime-local"></label><label>分类标识<input id="category" placeholder="ESSAY" list="categories"></label><datalist id="categories"><option value="ESSAY"><option value="ROBOTICS"><option value="LINUX"></datalist><label>分类名称<input id="label" placeholder="观察与思考"></label><label>摘要<textarea id="summary" rows="5" placeholder="用一两句话，告诉读者这篇文章在想什么。"></textarea></label><div class="path-preview"><span>文章地址</span><code id="path-preview">填写网址标识后显示</code></div><p class="metadata-note">“写入本地站点”会更新文章文件并运行构建、检查。线上发布仍需 Git 提交和推送。</p></aside>
+    </div>
+    <footer class="statusbar"><span>✳ 文字可以慢一点。</span><span id="disk-status">LOCAL WORKSPACE</span></footer>
+  </main>
+  <dialog id="insert-dialog"><form method="dialog" id="insert-form"><p class="eyebrow">ADD TO YOUR NOTE</p><h2 id="insert-title">插入链接</h2><label id="url-label">地址<input id="insert-url" required placeholder="https://… 或 /assets/images/…"></label><label id="text-label">链接文字 / 图片说明<input id="insert-text"></label><label id="code-label" hidden>代码<textarea id="insert-code" rows="8" spellcheck="false"></textarea></label><p id="insert-help">图片请先放进站点 assets/images 目录，再填写以 / 开头的路径。</p><div class="dialog-actions"><button type="button" id="cancel-insert">取消</button><button class="primary" type="submit">插入</button></div></form></dialog>
+</body>
+</html>

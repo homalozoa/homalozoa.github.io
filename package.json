@@ -5,6 +5,8 @@
   "type": "module",
   "description": "海果不能吃 — Homalozoa X 的个人博客",
   "scripts": {
+    "editor": "node tools/editor/server.mjs",
+    "check:editor": "node --check tools/editor/editor.js && node --test tools/editor/server.test.mjs",
     "build": "node scripts/build.mjs",
     "dev": "node scripts/serve.mjs",
     "check": "node --check scripts/build.mjs && node --check assets/site.js && python3 scripts/check.py"

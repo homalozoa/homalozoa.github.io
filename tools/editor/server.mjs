@@ -168,7 +168,7 @@ export function createEditorServer(root = defaultRoot) {
         const fields = draftInput(input);
         return send(200, await serialize(async () => {
           const existing = input.id ? await readDraft(input.id) : null;
-          const originalSlug = existing?.originalSlug || input.originalSlug || null;
+          const originalSlug = existing ? existing.originalSlug : input.originalSlug || null;
           if (originalSlug && !(await json(postsFile)).some((post) => post.slug === originalSlug)) throw fail("原文章不存在。", 404);
           return saveDraft({ ...existing, ...fields, id: existing?.id || randomUUID(), originalSlug, updatedAt: new Date().toISOString() });
         }));
