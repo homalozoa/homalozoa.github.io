@@ -767,45 +767,6 @@ summary:focus-visible,
   border-radius: 50%;
   background: #91ab98;
 }
-.about-section {
-  padding-block: 90px 96px;
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 70px;
-  scroll-margin-top: 20px;
-}
-.about-heading > .eyebrow {
-  color: var(--muted);
-}
-.about-heading h2 {
-  margin: 15px 0;
-  font: 400 28px/1.5 var(--serif);
-  letter-spacing: 0.1em;
-}
-.about-handle {
-  margin: 0;
-  color: var(--muted);
-  font-size: 11px;
-  letter-spacing: 0.04em;
-}
-.about-quotation blockquote {
-  font-size: 24px;
-  letter-spacing: 0.06em;
-}
-.about-quotation figcaption {
-  margin-top: 14px;
-}
-.about-bottom {
-  margin-top: 32px;
-  padding-top: 24px;
-  border-top: 1px solid var(--line);
-}
-.about-bottom p {
-  margin: 0 0 22px;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.9;
-}
 .site-footer {
   padding: 45px 7% 24px;
   border-top: 1px solid var(--line);
@@ -1411,9 +1372,6 @@ summary:focus-visible,
     grid-template-columns: 130px minmax(0, 1fr);
     gap: 28px;
   }
-  .about-section {
-    gap: 45px;
-  }
 }
 @media (max-width: 800px) {
   .site-header {
@@ -1489,35 +1447,6 @@ summary:focus-visible,
   }
   .post-card:first-child {
     padding-top: 15px;
-  }
-  .about-section {
-    padding-block: 65px;
-    grid-template-columns: 1fr;
-    gap: 28px;
-  }
-  .about-heading h2 {
-    font-size: 28px;
-  }
-  .about-heading {
-    position: relative;
-  }
-  .about-handle {
-    position: absolute;
-    bottom: 8px;
-    right: 0;
-  }
-  .about-quotation blockquote {
-    font-size: 23px;
-  }
-  .about-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 24px;
-    flex-wrap: wrap;
-  }
-  .about-bottom p {
-    margin: 0;
   }
   .interlude {
     min-height: 260px;
@@ -1769,33 +1698,6 @@ summary:focus-visible,
   }
   .interlude .quotation figcaption {
     font-size: 9px;
-  }
-  .about-section {
-    padding-block: 55px;
-    gap: 22px;
-  }
-  .about-heading h2 {
-    font-size: 26px;
-  }
-  .about-heading > .eyebrow {
-    font-size: 9px;
-  }
-  .about-handle {
-    font-size: 10px;
-  }
-  .about-quotation blockquote {
-    font-size: 21px;
-    letter-spacing: 0.03em;
-  }
-  .about-quotation figcaption {
-    font-size: 10px;
-  }
-  .about-bottom {
-    margin-top: 25px;
-    gap: 18px;
-  }
-  .about-bottom p {
-    font-size: 12px;
   }
   .site-footer {
     padding: 35px 6% 22px;

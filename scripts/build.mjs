@@ -38,12 +38,6 @@ const quotations = {
     work: "独坐敬亭山",
     url: "https://zh.wikisource.org/wiki/獨坐敬亭山",
   },
-  wind: {
-    text: "惟江上之清风，与山间之明月。",
-    author: "苏轼",
-    work: "前赤壁赋",
-    url: "https://zh.wikisource.org/wiki/前赤壁賦",
-  },
 };
 function attribution(quote) {
   return `<figcaption><span>${quote.author}</span><span class="citation-dash">—</span><cite><a href="${quote.url}" target="_blank" rel="noopener noreferrer">《${quote.work}》<span class="sr-only">（出处，新窗口）</span></a></cite></figcaption>`;
@@ -93,7 +87,7 @@ ${kind === "home" ? '<link rel="preload" as="image" href="/assets/images/planeta
 <a class="skip-link" href="#main">跳到内容</a>
 <header class="site-header">
   <a href="/" class="brand" aria-label="海果不能吃首页"><span class="brand-mark" aria-hidden="true">H</span><span>海果不能吃<span class="brand-sub">HOMALOZOA</span></span></a>
-  <nav aria-label="主导航"><a href="/" ${kind === "home" ? 'aria-current="page"' : ""}>首页</a><a href="/#notes">文章</a><a href="/archives/" ${kind === "archive" ? 'aria-current="page"' : ""}>归档</a><a href="/#about">关于</a></nav>
+  <nav aria-label="主导航"><a href="/" ${kind === "home" ? 'aria-current="page"' : ""}>首页</a><a href="/#notes">文章</a><a href="/archives/" ${kind === "archive" ? 'aria-current="page"' : ""}>归档</a></nav>
   <a class="github-link" href="https://github.com/homalozoa" target="_blank" rel="noopener noreferrer">GitHub ${arrow}<span class="sr-only">（新窗口）</span></a>
 </header>
 ${content}
@@ -130,7 +124,6 @@ function home() {
 </section>
 <section class="notes-section content-width" id="notes" aria-labelledby="notes-title" data-post-collection><div class="section-heading"><div><p class="eyebrow">01 <span>/</span> JOURNAL</p><h2 id="notes-title">最近的文章<span class="count">${String(posts.length).padStart(2, "0")}</span></h2></div><a class="text-link" href="/archives/">全部归档 ${arrow}</a></div>${filters(posts)}<div class="post-grid">${posts.map(postCard).join("")}</div></section>
 <section class="interlude" aria-label="庄子题辞"><div class="interlude-orbit" aria-hidden="true"><span></span></div><div class="interlude-inner"><span class="eyebrow">INTERLUDE</span>${quotation("beauty")}</div></section>
-<section class="about-section content-width" id="about" aria-labelledby="about-title"><div class="about-heading"><p class="eyebrow">02 <span>/</span> THE AUTHOR</p><h2 id="about-title">关于海果</h2><p class="about-handle">@homalozoa</p></div><div class="about-content">${quotation("wind", "about-quotation")}<div class="about-bottom"><p>写一点随笔，也记下折腾 Linux 和机器人的过程。</p><a href="https://github.com/homalozoa" target="_blank" rel="noopener noreferrer" class="text-link">在 GitHub 找到我 ${arrow}<span class="sr-only">（新窗口）</span></a></div></div></section>
 </main>`,
   });
 }
