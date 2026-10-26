@@ -1,6 +1,6 @@
 const $ = (id) => document.getElementById(id);
 const escape = (text) => String(text).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
-let library = { posts: [], drafts: [] };
+let library = { posts: [], drafts: [], trash: [] };
 let article = blank();
 let revision = 0;
 let savedRevision = 0;
@@ -109,8 +109,10 @@ function renderPreview() {
 function renderLibrary() {
   $("draft-count").textContent = library.drafts.length;
   $("post-count").textContent = library.posts.length;
+  $("trash-count").textContent = library.trash.length;
   $("draft-tab").setAttribute("aria-selected", libraryTab === "drafts");
   $("post-tab").setAttribute("aria-selected", libraryTab === "posts");
+  $("trash-tab").setAttribute("aria-selected", libraryTab === "trash");
   const query = $("search").value.trim().toLowerCase();
   const items = library[libraryTab].filter((item) => `${item.title} ${item.summary}`.toLowerCase().includes(query));
   const list = $("article-list");
@@ -118,16 +120,24 @@ function renderLibrary() {
   if (!items.length) {
     const empty = document.createElement("p");
     empty.className = "empty-list";
-    empty.textContent = query ? "没有找到这篇文字。" : "这里留给还在生长的想法。\n开始写，草稿会自动留下来。";
+    empty.textContent = query ? "没有找到这篇文字。" : libraryTab === "trash" ? "废纸篓是空的。移除的草稿可以在这里恢复。" : "这里留给还在生长的想法。\n开始写，草稿会自动留下来。";
     list.append(empty);
   }
   for (const item of items) {
     const button = document.createElement("button");
     button.className = "article-item";
-    button.classList.toggle("active", libraryTab === "drafts" ? item.id === article?.id : item.slug === article?.originalSlug);
-    button.innerHTML = `<strong>${escape(item.title || "未命名草稿")}</strong><p>${escape(item.summary || "还没有摘要，想法正在成形。")}</p><time>${escape((item.updatedAt || item.date).slice(0, 10).replaceAll("-", "."))} · ${libraryTab === "drafts" ? "本地草稿" : "站点文章"}</time>`;
+    button.classList.toggle("active", libraryTab === "drafts" ? item.id === article?.id : libraryTab === "posts" && item.slug === article?.originalSlug);
+    button.innerHTML = `<strong>${escape(item.title || "未命名草稿")}</strong><p>${escape(item.summary || "还没有摘要，想法正在成形。")}</p><time>${escape((item.updatedAt || item.date).slice(0, 10).replaceAll("-", "."))} · ${{ drafts: "本地草稿", posts: "站点文章", trash: "点击恢复草稿" }[libraryTab]}</time>`;
     button.addEventListener("click", () => task(async () => {
       await persist();
+      if (libraryTab === "trash") {
+        const restored = await api(`/api/restore/${item.id}`, {});
+        libraryTab = "drafts";
+        await refreshLibrary();
+        load(restored);
+        notice("草稿已从废纸篓恢复。");
+        return;
+      }
       const draft = libraryTab === "posts" ? library.drafts.find((draft) => draft.originalSlug === item.slug) : null;
       load(await api(libraryTab === "drafts" ? `/api/drafts/${item.id}` : draft ? `/api/drafts/${draft.id}` : `/api/articles/${item.slug}`));
     }));
@@ -152,6 +162,7 @@ function load(value, recovered = false, remember = true) {
   $("published").value = Number.isFinite(Date.parse(article.published)) ? localDate(article.published) : "";
   $("slug").readOnly = !!article.originalSlug;
   $("published").readOnly = !!article.originalSlug;
+  $("trash-draft").hidden = !article.id;
   $("save-status").textContent = recovered ? "已恢复未保存内容" : article.id ? "已保存到本机" : article.originalSlug ? "从站点载入" : "等待落笔";
   $("source-hint").textContent = "草稿自动保存在本机";
   $("notice").hidden = true;
@@ -183,7 +194,9 @@ function persist(force = false) {
     try {
       const result = await api("/api/drafts", article);
       article.id = result.id;
+      article.originalSlug = result.originalSlug;
       article.updatedAt = result.updatedAt;
+      $("trash-draft").hidden = false;
       savedRevision = version;
       storage("setItem", lastKey, article.id);
       if (version === revision) storage("removeItem", recoveryKey);
@@ -281,40 +294,74 @@ $("settings").addEventListener("click", () => settings($("metadata").hidden));
 $("close-settings").addEventListener("click", () => settings(false));
 $("draft-tab").addEventListener("click", () => { libraryTab = "drafts"; renderLibrary(); });
 $("post-tab").addEventListener("click", () => { libraryTab = "posts"; renderLibrary(); });
+$("trash-tab").addEventListener("click", () => { libraryTab = "trash"; renderLibrary(); });
 $("search").addEventListener("input", renderLibrary);
 $("new").addEventListener("click", () => task(async () => { await persist(); load(blank()); libraryTab = "drafts"; renderLibrary(); $("title").focus(); }));
 $("save").addEventListener("click", () => task(async () => { await persist(true); notice("草稿已保存到本机。"); }));
 document.addEventListener("keydown", (event) => {
-  if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "s") { event.preventDefault(); task(() => persist(true)); }
+  if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "s") { event.preventDefault(); if (!busy) task(() => persist(true)); }
   if (event.key === "Escape") settings(false);
 });
 window.addEventListener("beforeunload", (event) => { if (revision !== savedRevision) { event.preventDefault(); event.returnValue = ""; } });
 
-$("apply").addEventListener("click", () => task(async () => {
+function lockWorkspace(locked) {
+  busy = locked;
+  for (const pane of document.querySelectorAll(".writing-pane,.metadata,.library,.utility-actions")) pane.inert = locked;
+  for (const id of ["apply", "apply-only", "save"]) $(id).disabled = locked;
+}
+
+async function applyArticle(commit) {
   if (busy) return;
   if (!article.title.trim() || !article.summary.trim() || !article.slug.trim() || !article.html.trim() || !article.category.trim() || !article.label.trim()) {
     settings(true);
     notice("请先填写标题、正文，以及文章设置中的网址标识、分类和摘要。", true);
     return;
   }
-  busy = true;
-  for (const pane of document.querySelectorAll(".writing-pane,.metadata,.library,.utility-actions")) pane.inert = true;
-  $("apply").disabled = true;
-  $("apply").textContent = "正在构建与检查…";
+  lockWorkspace(true);
+  $("apply").textContent = commit ? "正在检查与签名提交…" : "正在构建与检查…";
   try {
     await persist(true);
-    const result = await api(`/api/apply/${article.id}`, {});
+    const result = await api(`/api/apply/${article.id}`, { commit });
     article.originalSlug = article.slug;
-    $("slug").readOnly = true;
-    $("published").readOnly = true;
+    if (result.draftRemoved) {
+      clearTimeout(autosave);
+      storage("removeItem", recoveryKey);
+      load({ ...article, id: undefined });
+      libraryTab = "posts";
+    }
+    $("slug").readOnly = $("published").readOnly = true;
     await refreshLibrary();
-    notice(result.message + " 文件已留在工作区，可通过 Git 审阅与提交。", false, result.path);
+    notice(result.message + (result.commit ? ` 提交：${result.commit.slice(0, 7)}` : " 草稿继续保留。"), false, result.path);
+  } catch (error) {
+    // A signing failure can happen after the source was written. Keep the saved
+    // draft's article identity so retrying cannot accidentally create a new URL.
+    if (article.id) {
+      try {
+        const stored = await api(`/api/drafts/${article.id}`);
+        article.originalSlug = stored.originalSlug;
+        $("slug").readOnly = $("published").readOnly = !!article.originalSlug;
+      } catch { /* The original error remains actionable if the server is offline. */ }
+    }
+    throw error;
   } finally {
-    busy = false;
-    for (const pane of document.querySelectorAll(".writing-pane,.metadata,.library,.utility-actions")) pane.inert = false;
-    $("apply").disabled = false;
-    $("apply").innerHTML = '写入本地站点 <span>↗</span>';
+    lockWorkspace(false);
+    $("apply").innerHTML = '写入并提交 <span>↗</span>';
   }
+}
+$("apply").addEventListener("click", () => task(() => applyArticle(true)));
+$("apply-only").addEventListener("click", () => task(() => applyArticle(false)));
+$("trash-draft").addEventListener("click", () => task(async () => {
+  if (busy || !article.id) return;
+  lockWorkspace(true);
+  try {
+    await persist(true);
+    await api(`/api/trash/${article.id}`, {});
+    clearTimeout(autosave);
+    storage("removeItem", recoveryKey);
+    load(article.originalSlug ? await api(`/api/articles/${article.originalSlug}`) : blank());
+    await refreshLibrary();
+    notice("草稿已移到废纸篓，站点文章保留。需要时点击废纸篓中的草稿即可恢复。");
+  } finally { lockWorkspace(false); }
 }));
 
 $("export").addEventListener("click", () => {
