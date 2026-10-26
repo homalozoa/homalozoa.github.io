@@ -1,5 +1,19 @@
 [
   {
+    "slug": "redesign-companies",
+    "title": "公司本身，也该重做一遍了",
+    "date": "2026-10-26",
+    "published": "2026-10-26T20:37:00+08:00",
+    "modified": "2026-10-26T12:39:30.646Z",
+    "category": "ESSAY",
+    "label": "观察与思考",
+    "summary": "AI Native 公司的创业者，要同时开发两个产品。一个是交给用户的东西，一个是能够持续把东西做出来的公司。",
+    "path": "/2026/10/26/redesign-companies/",
+    "cardTitle": [
+      "公司本身，也该重做一遍了"
+    ]
+  },
+  {
     "slug": "agent-authorship",
     "title": "Agent 替我做完之后",
     "date": "2026-09-15",
@@ -9,7 +23,9 @@
     "label": "技术与思考",
     "summary": "当任务能够绕过我的理解继续完成时，怎样让项目交付与个人能力的形成同时进入考虑？从一块电源板的条件变化谈起。",
     "path": "/2026/09/15/agent-authorship/",
-    "cardTitle": ["Agent 替我做完之后"]
+    "cardTitle": [
+      "Agent 替我做完之后"
+    ]
   },
   {
     "slug": "modified_archlinux",
@@ -21,7 +37,10 @@
     "label": "系统与工具",
     "summary": "从系统安装到桌面环境，记录一套顺手的 Arch Linux 工作环境。",
     "path": "/2021/09/15/modified_archlinux/",
-    "cardTitle": ["定制自由的生产力工具", "Arch Linux"]
+    "cardTitle": [
+      "定制自由的生产力工具",
+      "Arch Linux"
+    ]
   },
   {
     "slug": "ros2_build_install",
@@ -33,6 +52,9 @@
     "label": "机器人开发",
     "summary": "在 Arch Linux 与 Ubuntu 上，从源码编译、安装和配置 ROS 2 Galactic。",
     "path": "/2021/09/15/ros2_build_install/",
-    "cardTitle": ["ROS 2", "编译与安装"]
+    "cardTitle": [
+      "ROS 2",
+      "编译与安装"
+    ]
   }
 ]
