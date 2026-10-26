@@ -6,6 +6,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
 import { promisify } from "node:util";
 import { execFile } from "node:child_process";
+import { articleGit } from "./git.mjs";
 
 const run = promisify(execFile);
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -52,7 +53,9 @@ function draftInput(input) {
 
 export function createEditorServer(root = defaultRoot) {
   const draftDirectory = path.join(root, ".local/editor/drafts");
+  const trashDirectory = path.join(root, ".local/editor/trash");
   const postsFile = path.join(root, "content/posts.json");
+  const git = articleGit(root);
   // Serialize local mutations so autosave and site writes cannot interleave.
   let queue = Promise.resolve();
   const serialize = (task) => {
@@ -72,8 +75,19 @@ export function createEditorServer(root = defaultRoot) {
     await atomicWrite(draftFile(draft.id), JSON.stringify(draft, null, 2) + "\n");
     return draft;
   };
+  const moveDraft = async (id, restore = false) => {
+    const active = draftFile(id);
+    const trashed = path.join(trashDirectory, `${id}.json`);
+    const source = restore ? trashed : active;
+    const destination = restore ? active : trashed;
+    const draft = await json(source).catch((cause) => { if (cause.code === "ENOENT") throw fail("草稿不存在。", 404); throw cause; });
+    if (await stat(destination).then(() => true, (cause) => { if (cause.code === "ENOENT") return false; throw cause; })) throw fail("目标草稿已经存在，请刷新后重试。", 409);
+    await mkdir(path.dirname(destination), { recursive: true });
+    await rename(source, destination);
+    return draft;
+  };
 
-  async function applyDraft(id) {
+  async function applyDraft(id, commit = false) {
     const draft = await readDraft(id);
     if (!draft.title || !draft.summary || !draft.category || !draft.label || !draft.html.trim()) throw fail("请填写标题、摘要、分类和正文。");
     if (!slugPattern.test(draft.slug)) throw fail("网址标识只能使用小写英文字母、数字、短横线和下划线。");
@@ -92,12 +106,23 @@ export function createEditorServer(root = defaultRoot) {
       throw error;
     });
     if (!original && previousArticle !== null) throw fail("同名正文文件已经存在，请换一个网址标识。", 409);
-    const post = { ...original, slug: draft.slug, title: draft.title, date, published: original?.published || draft.published, modified: new Date().toISOString(), category: draft.category, label: draft.label, summary: draft.summary, path: route, cardTitle: [draft.title] };
+    const unchanged = original && previousArticle === draft.html && ["title", "category", "label", "summary"].every((field) => original[field] === draft[field]);
+    const post = { ...original, slug: draft.slug, title: draft.title, date, published: original?.published || draft.published, modified: unchanged ? original.modified : new Date().toISOString(), category: draft.category, label: draft.label, summary: draft.summary, path: route, cardTitle: original?.title === draft.title ? original.cardTitle : [draft.title] };
     const nextPosts = original ? posts.map((item) => item.slug === original.slug ? post : item) : [post, ...posts];
+    const nextPostsText = JSON.stringify(posts) === JSON.stringify(nextPosts) ? previousPosts : JSON.stringify(nextPosts, null, 2) + "\n";
+    const gitState = commit ? await git.inspect(draft.slug) : null;
     const temporary = await mkdtemp(path.join(tmpdir(), "blog-editor-"));
     try {
       await cp(root, temporary, { recursive: true, filter: (source) => !/^(?:\.git|\.local|node_modules|output|\.playwright-cli|tools)(?:\/|$)/.test(path.relative(root, source)) });
-      await writeFile(path.join(temporary, "content/posts.json"), JSON.stringify(nextPosts, null, 2) + "\n");
+      if (gitState?.dirtyGenerated.length) {
+        await run(process.execPath, ["scripts/build.mjs"], { cwd: temporary, timeout: 30000 });
+        for (const relative of gitState.dirtyGenerated) {
+          const before = await readFile(path.join(root, relative), "utf8").catch(() => null);
+          const expected = await readFile(path.join(temporary, relative), "utf8").catch(() => null);
+          if (before !== expected) throw fail(`生成页面有单独修改，请先处理后重试：${relative}`, 409);
+        }
+      }
+      await writeFile(path.join(temporary, "content/posts.json"), nextPostsText);
       await writeFile(path.join(temporary, "content/posts", `${draft.slug}.html`), draft.html);
       try {
         await run(process.execPath, ["scripts/build.mjs"], { cwd: temporary, timeout: 30000 });
@@ -106,15 +131,14 @@ export function createEditorServer(root = defaultRoot) {
         throw fail(`本地检查未通过，站点源文件未改动。\n${error.stderr || error.stdout || error.message}`, 422);
       }
       if (await readFile(postsFile, "utf8") !== previousPosts || await readFile(articleFile, "utf8").catch(() => null) !== previousArticle) throw fail("检查期间文章源文件发生变化，请重新载入后再写入。", 409);
-      const changes = new Map([["content/posts.json", JSON.stringify(nextPosts, null, 2) + "\n"], [`content/posts/${draft.slug}.html`, draft.html]]);
-      async function generated(directory) {
-        for (const entry of await readdir(path.join(temporary, directory), { withFileTypes: true })) {
-          const relative = path.posix.join(directory, entry.name);
-          if (entry.isDirectory() && (directory || /^(?:\d{4}|archives)$/.test(entry.name))) await generated(relative);
-          if (entry.isFile() && entry.name.endsWith(".html")) changes.set(relative, await readFile(path.join(temporary, relative), "utf8"));
-        }
+      const changes = new Map([["content/posts.json", nextPostsText], [`content/posts/${draft.slug}.html`, draft.html]]);
+      const generated = new Set(["index.html", "404.html", "archives/index.html"]);
+      for (const item of nextPosts) {
+        generated.add(`${item.path.slice(1)}index.html`);
+        generated.add(`archives/${item.date.slice(0, 4)}/index.html`);
+        generated.add(`archives/${item.date.slice(0, 7).replace("-", "/")}/index.html`);
       }
-      await generated("");
+      for (const relative of generated) changes.set(relative, await readFile(path.join(temporary, relative), "utf8"));
       const originals = new Map();
       try {
         for (const [relative, content] of changes) {
@@ -132,6 +156,12 @@ export function createEditorServer(root = defaultRoot) {
         throw error;
       }
       await saveDraft({ ...draft, originalSlug: draft.slug, appliedAt: post.modified });
+      if (commit) {
+        const result = await git.commit(draft.slug, [...changes.keys()], gitState.existsInGit);
+        try { await moveDraft(id); }
+        catch { return { ...result, path: route, draftRemoved: false, message: "内容已保存到 Git，但草稿移除失败，请手动移到废纸篓。线上发布仍需推送。" }; }
+        return { ...result, path: route, draftRemoved: true, message: result.created ? "已写入并完成 GPG 签名提交，草稿已移到废纸篓。线上发布仍需推送。" : "内容已在 Git 中，无需重复提交；草稿已移到废纸篓。" };
+      }
       return { path: route, message: "已写入本地站点，构建与检查通过。" };
     } finally { await rm(temporary, { recursive: true, force: true }); }
   }
@@ -152,10 +182,13 @@ export function createEditorServer(root = defaultRoot) {
         if (req.headers.origin !== origin || req.headers["content-type"]?.split(";")[0] !== "application/json") throw fail("写入请求必须来自本地编辑器。", 403);
       } else if (req.method !== "GET") throw fail("不支持此操作。", 405);
       if (pathname === "/api/library" && req.method === "GET") {
-        const files = await readdir(draftDirectory).catch((error) => { if (error.code === "ENOENT") return []; throw error; });
-        const drafts = await Promise.all(files.filter((name) => idPattern.test(name.replace(/\.json$/, "")) && name.endsWith(".json")).map((name) => json(path.join(draftDirectory, name))));
-        drafts.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
-        return send(200, { posts: await json(postsFile), drafts: drafts.map(({ html, ...draft }) => draft) });
+        const summaries = async (directory) => {
+          const files = await readdir(directory).catch((error) => { if (error.code === "ENOENT") return []; throw error; });
+          const drafts = await Promise.all(files.filter((name) => idPattern.test(name.replace(/\.json$/, "")) && name.endsWith(".json")).map((name) => json(path.join(directory, name))));
+          drafts.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+          return drafts.map(({ html, ...draft }) => draft);
+        };
+        return send(200, { posts: await json(postsFile), drafts: await summaries(draftDirectory), trash: await summaries(trashDirectory) });
       }
       if (pathname.startsWith("/api/articles/") && req.method === "GET") {
         const slug = pathname.slice("/api/articles/".length);
@@ -174,9 +207,15 @@ export function createEditorServer(root = defaultRoot) {
         }));
       }
       if (pathname.startsWith("/api/drafts/") && req.method === "GET") return send(200, await readDraft(pathname.slice("/api/drafts/".length)));
-      if (pathname.startsWith("/api/apply/") && req.method === "POST") {
+      if ((pathname.startsWith("/api/trash/") || pathname.startsWith("/api/restore/")) && req.method === "POST") {
         await body(req);
-        return send(200, await serialize(() => applyDraft(pathname.slice("/api/apply/".length))));
+        const restore = pathname.startsWith("/api/restore/");
+        return send(200, await serialize(() => moveDraft(pathname.slice(restore ? "/api/restore/".length : "/api/trash/".length), restore)));
+      }
+      if (pathname.startsWith("/api/apply/") && req.method === "POST") {
+        const input = await body(req);
+        if (!input || typeof input !== "object" || (input.commit !== undefined && typeof input.commit !== "boolean")) throw fail("提交选项必须是布尔值。");
+        return send(200, await serialize(() => applyDraft(pathname.slice("/api/apply/".length), input.commit === true)));
       }
       if (pathname.startsWith("/api/")) throw fail("接口不存在。", 404);
       let file;
