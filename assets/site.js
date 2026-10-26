@@ -101,3 +101,39 @@ function initArticle() {
 }
 
 initArticle();
+
+function initFilters() {
+  for (const collection of document.querySelectorAll(
+    "[data-post-collection]",
+  )) {
+    const filters = collection.querySelector(".post-filters");
+    const entries = [...collection.querySelectorAll("[data-category]")];
+    const status = collection.querySelector(".filter-status");
+    if (!filters || !entries.length) continue;
+    filters.hidden = false;
+    filters.addEventListener("click", (event) => {
+      const button = event.target.closest("button[data-filter]");
+      if (!button) return;
+      const category = button.dataset.filter;
+      for (const option of filters.querySelectorAll("button")) {
+        option.setAttribute("aria-pressed", String(option === button));
+      }
+      for (const entry of entries) {
+        entry.hidden =
+          category !== "all" && entry.dataset.category !== category;
+      }
+      for (const year of collection.querySelectorAll(".archive-year")) {
+        const visibleCount = [
+          ...year.querySelectorAll("[data-category]"),
+        ].filter((entry) => !entry.hidden).length;
+        year.hidden = visibleCount === 0;
+        year.querySelector(".year-label > span").textContent =
+          `${String(visibleCount).padStart(2, "0")} ENTRIES`;
+      }
+      const count = entries.filter((entry) => !entry.hidden).length;
+      status.textContent = `显示 ${count} 篇文章`;
+    });
+  }
+}
+
+initFilters();

@@ -1,8 +1,8 @@
 # 海果不能吃
 
-Homalozoa X 的个人博客，收集那些暂时说不出用途的观察、疑问与兴趣。英文名为 “Homalozoa is not for eating.”。界面以少量后现代色块、线条和几何图形作为装饰；文章页提供目录、代码复制和阅读进度。
+Homalozoa 的个人博客。随笔、Linux 与机器人。英文名为 “Homalozoa is not for eating.”。
 
-本站从旧 Hexo / NexT 静态输出迁移而来。两篇历史文章的正文、代码、发布时间、修改时间和永久链接均保留；正文标题从 `h4` 调整为 `h2`，原有标题锚点不变。文章仍是 2021 年的记录，重构不代表技术内容已更新。
+界面取意于《无人深空》的星际风景：青灰天空、赭红峡谷、象牙白行星和细线导航。首页使用原创风景图，文章与归档延续深青底色和暖白文字。正文、原始日期、永久链接及标题锚点保留；2021 年的技术文章仍是当年的记录。
 
 ## 本地开发
 
@@ -23,13 +23,29 @@ npm run check
 
 ## 写作与维护
 
-- `content/posts.json`：文章标题、摘要、分类、日期与永久链接。可选的 `cardTitle` 数组控制首页标题分行；省略时直接使用文章标题。分类不限于技术；其他分类默认使用文章序号封面，不会套用 Linux 或 ROS 的图案。
+- `content/posts.json`：文章标题、摘要、分类、日期与永久链接。首页、归档与文章页使用相同标题；分类按钮由现有文章自动生成。
 - `content/posts/*.html`：文章正文。保留 HTML 源码可以完整迁移原有代码高亮，无需重新安装旧主题。
-- `scripts/build.mjs`：公共模板、首页、文章页、按年/月归档及 404 页面生成。
-- `assets/site.css`、`assets/site.js`：网站样式及文章页渐进增强。
-- 根目录、`2021/`、`archives/` 中的 HTML：可直接发布的生成结果，请通过源文件修改并重新生成。
+- `scripts/build.mjs`：公共模板、引文、首页、文章页、按年/月归档及 404 页面生成。
+- `assets/site.css`、`assets/site.js`：响应式样式、分类筛选、目录、代码复制与阅读进度。
+- `assets/images/`：本地 WebP 风景图及生成说明。
+- 根目录、`2021/`、`2026/`、`archives/` 中的 HTML：可直接发布的生成结果，请通过源文件修改并重新生成。
 
 新增文章时，在 `content/posts/` 中创建与 `slug` 同名的 HTML，将文章信息添加到 `content/posts.json`（最新在前），运行构建与检查。`path` 填写以 `/` 开头和结尾的永久链接；`published`、`modified` 使用带时区的 ISO 8601 时间。正文顶层标题使用 `h2` 并设置唯一 `id`，即可生成目录。
+
+首页与归档的分类筛选采用渐进增强：禁用 JavaScript 时显示全部文章。文章目录使用原生 `details`；手机初始收起，桌面初始展开。代码可以横向滚动，复制失败时提供手动选中方式。入场动画只播放一次，遵循 `prefers-reduced-motion`；打印时隐藏导航与装饰并切换为浅色正文。
+
+## 引文
+
+引文核对原文后转为简体字，标点按当前页面排版。作者和作品在页面可见，并附出处链接。
+
+| 位置            | 引文                         | 出处                                                                         |
+| --------------- | ---------------------------- | ---------------------------------------------------------------------------- |
+| 首页、归档、404 | 人生天地间，忽如远行客。     | 佚名，[《古诗十九首·青青陵上柏》](https://zh.wikisource.org/wiki/古詩十九首) |
+| 首页题辞        | 天地有大美而不言。           | 庄子，[《庄子·知北游》](https://zh.wikisource.org/wiki/莊子/知北遊)          |
+| 关于            | 惟江上之清风，与山间之明月。 | 苏轼，[《前赤壁赋》](https://zh.wikisource.org/wiki/前赤壁賦)                |
+| 页脚            | 相看两不厌，只有敬亭山。     | 李白，[《独坐敬亭山》](https://zh.wikisource.org/wiki/獨坐敬亭山)            |
+
+不将现代译者的措辞冒充为古代作者原文。
 
 ## GitHub Pages
 
@@ -39,14 +55,6 @@ npm run check
 
 ## 资源
 
-字体 Anton 与 Space Grotesk 从 Google Fonts 获取，已保存在 `assets/fonts/`，各自 SIL Open Font License 同目录保留。
+Space Grotesk 从 Google Fonts 获取，字体与 SIL Open Font License 保存在 `assets/fonts/`。中文衬线字使用设备本地字体。旧版 Anton 字体、`images/` 资源和根目录 `LICENSE` 保留。
 
-## 视觉与操作原则
-
-首页以内容为主，只保留珊瑚橙、钴蓝和黄绿色的几何装饰。标题和最近文章在首屏内即可出现，正文使用正常字体、行距和列宽；移动端改为单列，整页没有水平滚动。除滚动和链接状态外不使用持续动画。
-
-旧站 `images/` 资源和根目录 `LICENSE` 保留。
-
-## 首页引文
-
-首页题辞节选自 Octavia E. Butler 的《播种者寓言》（_Parable of the Sower_, 1993）。英文依据 [Hachette 出版社页面](https://www.hachette.co.nz/octavia-e-butler/parable-of-the-sower-the-new-york-times-bestseller) 核对，中文为本站译文，不冒用已出版中译本的措辞或译者署名。页面显示作者、作品、年份与出处链接。
+首页风景由内置 ImageGen 生成，无游戏截图、商标或游戏原有角色；文件、提示词和 WebP 编码参数见 [资源说明](assets/images/README.md)。网站不请求远程图片、字体或脚本。
